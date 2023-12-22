@@ -9,10 +9,13 @@ using Unity.MLAgents.Sensors;
 // This is necessary since MLAgents encodes everything in a vector. This simply makes things more 
 // Readable 
 
-public enum ActionSpace
+public enum ActionKey
 {
-    MOVE_X = 0, 
-    MOVE_Z = 1,
+    IDLE = 0,
+    MOVE_X = 1, 
+    MOVE_Z = 2,
+    INTERACT = 4, 
+    DROP = 8,
 }
 
 public enum ObservationSpace
@@ -26,12 +29,18 @@ public class LocalAgent : Agent
     private float speed = 1f;
 
     [SerializeField]
-    private Transform targetTransform; 
+    private Transform targetTransform;
+
+    private Inventory inventory = new Inventory();
+
+    private ActionKey currentAction;
 
     // Configure the Agent's starting state 
     public override void OnEpisodeBegin()
     {
         transform.localPosition = new Vector3(10, 0.25f, 0);
+        inventory = new Inventory();
+        currentAction = ActionKey.IDLE;
     }
 
     // Collect observations from the environment based on the defined sensor information
@@ -55,20 +64,39 @@ public class LocalAgent : Agent
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
         continuousActions[0] = Input.GetAxisRaw("Horizontal");
         continuousActions[1] = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKey(KeyCode.E))
+            SetAction(ActionKey.INTERACT);
+        else
+            UnsetAction(ActionKey.INTERACT);
+
+        if (Input.GetKey(KeyCode.X))
+            SetAction(ActionKey.DROP);
+        else
+            UnsetAction(ActionKey.DROP);
+
+
     }
 
     // Provide Rewards
-    private void OnTriggerEnter(Collider other)
+    // If we require physics, this can be made as OnColliderStay. Otherwise, use OnTriggerStay
+    private void OnTriggerStay(Collider other)
     {
-        if (other.TryGetComponent(out Resource resource))
+        if (other.TryGetComponent<Resource>(out Resource resource) && IsActionSet(ActionKey.INTERACT))
         {
-            AddReward(10f);
-            EndEpisode();
+            Debug.Log("Success!");
+            inventory.Add(resource.Take(5));
+            UnsetAction(ActionKey.INTERACT);
         }
-        else if (other.TryGetComponent(out Obstacle obstacle))
+
+        if (other.TryGetComponent(out Obstacle obstacle))
         {
             AddReward(-10f);
-            EndEpisode();      
+            EndEpisode();
         }
     }
+
+    private void SetAction(ActionKey key) => currentAction |= key;
+    private void UnsetAction(ActionKey key) => currentAction &= ~key;
+    private bool IsActionSet(ActionKey key) => (currentAction & key) != 0;
 }

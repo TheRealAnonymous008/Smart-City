@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-enum ResourceTypes
+public enum ResourceType
 {
     FOOD,
     WATER,
@@ -12,21 +13,62 @@ enum ResourceTypes
     CLOTH
 }
 
+public struct ResourceInfo
+{
+    public ResourceType type;
+    public int quantity;
+}
+
 public class Resource : MonoBehaviour
 {
     // Start is called before the first frame update
 
     [SerializeField]
-    private ResourceTypes type;
-
+    private ResourceType type;
     [SerializeField]
-    private int quantity = 25; 
+    private int quantity;
+     
 
-    public int Take(int q)
+    public ResourceType Type { get { return type; } private set { type = value; } }
+    public int Quantity { get { return quantity; } private set { quantity = value; } }
+
+    public Resource(ResourceType type, int quantity)
     {
-        int returned = Mathf.Min(quantity, q);
-        quantity -= returned;
+        Type = type; 
+        Quantity = quantity;
+    }
 
-        return returned;
+    public ResourceInfo Take(int q)
+    {
+        int returned = Mathf.Min(Quantity, q);
+        Quantity -= returned;
+
+        return new ResourceInfo() { quantity = returned, type = Type}; 
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.TryGetComponent<Resource>(out Resource otherResource))
+        {
+            // Merge resources 
+            Debug.Log("Hello world");
+            if (otherResource.GetInstanceID() < GetInstanceID() && otherResource.Type == Type)
+            {
+                Quantity += otherResource.Quantity;
+                Destroy(otherResource.gameObject);
+            }
+        }
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Handles.Label(transform.position, this.ToString(), new GUIStyle { 
+            fontSize = 10
+        });
+    }
+
+    public override string ToString()
+    {
+        return Type.ToString() + ": " + Quantity.ToString();
     }
 }
