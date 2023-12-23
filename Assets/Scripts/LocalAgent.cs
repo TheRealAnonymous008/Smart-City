@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEditor;
 
 // Constants which specify the action and state space of each local agent
 // This is necessary since MLAgents encodes everything in a vector. This simply makes things more 
@@ -29,25 +30,26 @@ public class LocalAgent : Agent
     private float speed = 1f;
 
     [SerializeField]
-    private Transform targetTransform;
+    private Vector3 initialPosition; 
 
     private Inventory inventory = new Inventory();
 
     private ActionKey currentAction;
+    private float aliveReward; 
 
     // Configure the Agent's starting state 
     public override void OnEpisodeBegin()
     {
-        transform.localPosition = new Vector3(10, 0.25f, 0);
+        transform.localPosition = initialPosition;
         inventory = new Inventory();
         currentAction = ActionKey.IDLE;
+        aliveReward = 0;
     }
 
     // Collect observations from the environment based on the defined sensor information
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.position);
-        sensor.AddObservation(targetTransform.position);
     }
 
     // Act upon each action.
@@ -56,7 +58,14 @@ public class LocalAgent : Agent
         float moveX = actions.ContinuousActions[0];
         float moveZ = actions.ContinuousActions[1];
 
-        transform.position += new Vector3(moveX, 0, moveZ) * Time.deltaTime * speed;
+        transform.position += new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * speed;
+        AddReward(-0.01f);
+        aliveReward -= 0.01f;
+
+        if (aliveReward <= -100)
+        {
+            EndEpisode();
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -82,16 +91,24 @@ public class LocalAgent : Agent
     // If we require physics, this can be made as OnColliderStay. Otherwise, use OnTriggerStay
     private void OnTriggerStay(Collider other)
     {
-        if (other.TryGetComponent<Resource>(out Resource resource) && IsActionSet(ActionKey.INTERACT))
+        if (other.TryGetComponent<Resource>(out Resource resource))
         {
-            Debug.Log("Success!");
-            inventory.Add(resource.Take(5));
-            UnsetAction(ActionKey.INTERACT);
+            if (IsActionSet(ActionKey.INTERACT))
+            {
+                inventory.Add(resource.Take(5));
+                UnsetAction(ActionKey.INTERACT);
+            }
+
+            AddReward(resource.Take(resource.Quantity).quantity);
+            if (resource.Quantity == 100)
+            {
+                EndEpisode();
+            }
         }
 
         if (other.TryGetComponent(out Obstacle obstacle))
         {
-            AddReward(-10f);
+            AddReward(-100f);
             EndEpisode();
         }
     }

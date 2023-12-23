@@ -43,6 +43,11 @@ public class Resource : MonoBehaviour
         int returned = Mathf.Min(Quantity, q);
         Quantity -= returned;
 
+        if (Quantity == 0)
+        {
+            GameObject.Destroy(gameObject);
+        }
+
         return new ResourceInfo() { quantity = returned, type = Type}; 
     }
     private void OnTriggerStay(Collider other)
@@ -62,9 +67,9 @@ public class Resource : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Handles.Label(transform.position, this.ToString(), new GUIStyle { 
-            fontSize = 10
-        });
+        //Handles.Label(transform.position, this.ToString(), new GUIStyle { 
+        //    fontSize = 10
+        //});
     }
 
     public override string ToString()

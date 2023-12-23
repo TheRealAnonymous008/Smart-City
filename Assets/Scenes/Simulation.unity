@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 5690535060264705138}
+  m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -182,7 +182,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 17.674355
+  field of view: 29.66597
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -215,7 +215,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!1001 &5575459680540142157
+--- !u!1001 &992547872
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -225,7 +225,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 396928294550812433, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 396928294550812433, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_LocalPosition.y
@@ -233,7 +233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 396928294550812433, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.59
       objectReference: {fileID: 0}
     - target: {fileID: 396928294550812433, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_LocalRotation.w
@@ -272,14 +272,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
---- !u!108 &5690535060264705138 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 1151995488550589671, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
-  m_PrefabInstance: {fileID: 5575459680540142157}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 963194228}
-  - {fileID: 5575459680540142157}
+  - {fileID: 992547872}

@@ -1,0 +1,1 @@
+mlagents-learn config/config.yaml --force --torch-device cuda --env "C:\Users\Joaquin\Desktop\Playground\Game\Smart City\builds\Smart City.exe" --num-envs=2
