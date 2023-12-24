@@ -150,8 +150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
-    NumStackedVectorObservations: 8
+    VectorObservationSize: 0
+    NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 
@@ -159,14 +159,14 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 79ed4b07b8281ed4b8f0ce9bfb99ee7e, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: LocalAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
-  m_DeterministicInference: 0
+  m_DeterministicInference: 1
   m_ObservableAttributeHandling: 0
 --- !u!114 &8974526313429990453
 MonoBehaviour:
@@ -186,6 +186,7 @@ MonoBehaviour:
   MaxStep: 0
   speed: 5
   initialPosition: {x: 0, y: 0.5, z: 0}
+  environment: {fileID: 0}
 --- !u!114 &4106618231746241595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,12 +221,12 @@ MonoBehaviour:
   m_RaysPerDirection: 32
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.25
-  m_RayLength: 8
+  m_RayLength: 50
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 6144
   m_ObservationStacks: 32
-  m_AlternatingRayOrder: 1
+  m_AlternatingRayOrder: 0
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 0.38148606, g: 1, b: 0, a: 1}
   rayMissColor: {r: 0.97735846, g: 0.17518678, b: 0.17518678, a: 1}

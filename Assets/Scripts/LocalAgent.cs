@@ -30,41 +30,47 @@ public class LocalAgent : Agent
     private float speed = 1f;
 
     [SerializeField]
-    private Vector3 initialPosition; 
+    private Vector3 initialPosition;
+
+    [SerializeField]
+    private Environment environment;
 
     private Inventory inventory = new Inventory();
 
     private ActionKey currentAction;
-    private float aliveReward; 
+    private float aliveReward;
+    private int collected;
 
     // Configure the Agent's starting state 
     public override void OnEpisodeBegin()
     {
         transform.localPosition = initialPosition;
+        transform.Rotate(Vector3.up, Random.Range(0, 360));
         inventory = new Inventory();
         currentAction = ActionKey.IDLE;
         aliveReward = 0;
+        collected = 0;
     }
 
     // Collect observations from the environment based on the defined sensor information
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.position);
+
     }
 
     // Act upon each action.
     public override void OnActionReceived(ActionBuffers actions)
     {
-        float moveX = actions.ContinuousActions[0];
-        float moveZ = actions.ContinuousActions[1];
+        float step = actions.ContinuousActions[0];
+        float turn = actions.ContinuousActions[1];
 
-        transform.position += new Vector3(moveX, 0, moveZ).normalized * Time.deltaTime * speed;
-        AddReward(-0.01f);
-        aliveReward -= 0.01f;
+        transform.position += transform.forward * Time.deltaTime * speed * step;
+        transform.Rotate(Vector3.up, turn * Time.deltaTime * 180f);
 
-        if (aliveReward <= -100)
+        if (aliveReward < 10)
         {
-            EndEpisode();
+            AddReward(0.01f);
+            aliveReward += 0.01f;
         }
     }
 
@@ -83,8 +89,12 @@ public class LocalAgent : Agent
             SetAction(ActionKey.DROP);
         else
             UnsetAction(ActionKey.DROP);
+    }
 
-
+    private void Kill()
+    {
+        environment.ResetEnvironment();
+        EndEpisode();
     }
 
     // Provide Rewards
@@ -100,16 +110,19 @@ public class LocalAgent : Agent
             }
 
             AddReward(resource.Take(resource.Quantity).quantity);
-            if (resource.Quantity == 100)
+            aliveReward = 0;
+            collected += 1;
+            if (collected == 15)
             {
-                EndEpisode();
+                AddReward(100);
+                Kill();
             }
         }
 
         if (other.TryGetComponent(out Obstacle obstacle))
         {
             AddReward(-100f);
-            EndEpisode();
+            Kill();
         }
     }
 

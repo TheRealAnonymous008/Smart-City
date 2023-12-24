@@ -17,6 +17,8 @@ public struct ResourceInfo
 {
     public ResourceType type;
     public int quantity;
+    public Vector3 position;
+    public Vector3 scale; 
 }
 
 public class Resource : MonoBehaviour
@@ -29,8 +31,8 @@ public class Resource : MonoBehaviour
     private int quantity;
      
 
-    public ResourceType Type { get { return type; } private set { type = value; } }
-    public int Quantity { get { return quantity; } private set { quantity = value; } }
+    public ResourceType Type { get { return type; } set { type = value; } }
+    public int Quantity { get { return quantity; } set { quantity = value; } }
 
     public Resource(ResourceType type, int quantity)
     {
@@ -48,8 +50,14 @@ public class Resource : MonoBehaviour
             GameObject.Destroy(gameObject);
         }
 
-        return new ResourceInfo() { quantity = returned, type = Type}; 
+        return new ResourceInfo() { quantity = returned, type = Type };
     }
+
+    public ResourceInfo GetInfo()
+    {
+        return new ResourceInfo() { quantity = Quantity, type = Type , position = transform.localPosition, scale = transform.localScale};
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.TryGetComponent<Resource>(out Resource otherResource))
