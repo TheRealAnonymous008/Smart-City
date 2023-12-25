@@ -29,19 +29,28 @@ public class LocalAgent : Agent
     [SerializeField]
     private float speed = 1f;
 
-    [SerializeField]
-    private Vector3 initialPosition;
+    private Vector3 initialPosition; 
 
     [SerializeField]
     private Environment environment;
 
     private Inventory inventory = new Inventory();
-
     private ActionKey currentAction;
+
+    // Miscellaneous 
     private float aliveReward;
     private int collected;
 
+    public delegate void _Event();
+    public event _Event OnAgentDeath;
+
     // Configure the Agent's starting state 
+    public override void Initialize()
+    {
+        base.Initialize();
+        initialPosition = transform.position;
+    }
+
     public override void OnEpisodeBegin()
     {
         transform.localPosition = initialPosition;
@@ -91,9 +100,8 @@ public class LocalAgent : Agent
             UnsetAction(ActionKey.DROP);
     }
 
-    private void Kill()
+    public void Kill()
     {
-        environment.ResetEnvironment();
         EndEpisode();
     }
 
@@ -112,17 +120,16 @@ public class LocalAgent : Agent
             AddReward(resource.Take(resource.Quantity).quantity);
             aliveReward = 0;
             collected += 1;
-            if (collected == 15)
+            if (collected == 6)
             {
                 AddReward(100);
-                Kill();
             }
         }
 
         if (other.TryGetComponent(out Obstacle obstacle))
         {
             AddReward(-100f);
-            Kill();
+            OnAgentDeath?.Invoke();
         }
     }
 

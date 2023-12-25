@@ -33,4 +33,9 @@ public class Environment : MonoBehaviour
             obj.transform.localScale = r.scale;
         }
     }
+
+    public int ResourceCount()
+    {
+        return this.GetComponentsInChildren<Resource>().Length;
+    }
 }

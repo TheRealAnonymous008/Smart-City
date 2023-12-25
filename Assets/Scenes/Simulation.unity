@@ -178,7 +178,7 @@ PrefabInstance:
     - target: {fileID: 5757571092222317908, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 5cbd38b3698ad8040a67c6787b190786, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: caee52a6a03d0284ab6ca53720211ca9, type: 3}
     - target: {fileID: 5757571092222317908, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_UseChildSensors
       value: 1
@@ -190,6 +190,18 @@ PrefabInstance:
     - target: {fileID: 6822086639839509260, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: m_LocalPosition.z
       value: -5.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122862190087959316, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122862190087959316, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 7271693986368446309, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
+      propertyPath: m_DeterministicInference
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8606137060620673002, guid: 9e26b4a180e993b42b359f1be4739794, type: 3}
       propertyPath: quantity
