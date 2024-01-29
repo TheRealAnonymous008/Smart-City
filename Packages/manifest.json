@@ -4,6 +4,7 @@
     "com.unity.feature.development": "1.0.1",
     "com.unity.ml-agents": "file:C:/Users/Joaquin/Desktop/Playground/Smart Sim/ml-agents-release_21/com.unity.ml-agents",
     "com.unity.ml-agents.extensions": "file:C:/Users/Joaquin/Desktop/Playground/Smart Sim/ml-agents-release_21/com.unity.ml-agents.extensions",
+    "com.unity.probuilder": "5.2.2",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.6",
     "com.unity.ugui": "1.0.0",
